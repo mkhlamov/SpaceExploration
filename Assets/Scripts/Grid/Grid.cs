@@ -11,12 +11,21 @@ namespace SpaceExploration.Grid
         public int ColCount => _colCount;
 
         private Vector2 _gridPos;
+        public Vector2 GridPosition => _gridPos;
 
         public Grid(int rows, int cols, Vector2 gridPos)
         {
             _rowCount = rows;
             _colCount = cols;
             _gridPos = gridPos;
+        }
+
+        public bool IsInGrid(Vector2 position)
+        {
+            return (position.x >= _gridPos.x - (_colCount - 1) / 2) &&
+                   (position.x <= _gridPos.x + (_colCount - 1) / 2) &&
+                   (position.y >= _gridPos.y - (_rowCount - 1) / 2) &&
+                   (position.y <= _gridPos.y + (_rowCount - 1) / 2);
         }
     }
 }

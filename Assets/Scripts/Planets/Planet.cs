@@ -4,19 +4,17 @@ namespace SpaceExploration.Planets
 {
     public class Planet
     {
+        private Vector2 _coordinates;
+        public Vector2 Coordinates => _coordinates;
+
         private int _rating;
 
-        public int Rating
-        {
-            get => _rating;
-            set => _rating = Mathf.Clamp(value,1, 10000);
-        }
+        public int Rating => _rating;
 
-        private Vector2 _coordinates;
-        public Vector2 Coordinates
+        public Planet(Vector2 coordinates, int rating)
         {
-            get => _coordinates;
-            set => _coordinates = value;
+            _coordinates = coordinates;
+            _rating = Mathf.Clamp(rating, 1, 10000);
         }
     }
 }
