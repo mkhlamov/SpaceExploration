@@ -1,8 +1,8 @@
 ﻿using System;
-using Input;
+using SpaceExploration.Input;
 using UnityEngine;
 
-namespace CompositionRoot
+namespace SpaceExploration.CompositionRoot
 {
     public class App : MonoBehaviour
     {

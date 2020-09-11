@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Grid
+namespace SpaceExploration.Grid
 {
     public class Grid
     {

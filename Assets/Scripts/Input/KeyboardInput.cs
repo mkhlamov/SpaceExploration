@@ -1,7 +1,7 @@
-﻿using Interfaces;
+﻿using SpaceExploration.Interfaces;
 using UnityEngine;
 
-namespace Input
+namespace SpaceExploration.Input
 {
     public class KeyboardInput : IInputService
     {

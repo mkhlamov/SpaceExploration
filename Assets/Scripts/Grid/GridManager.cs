@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Grid
+namespace SpaceExploration.Grid
 {
     public class GridManager : MonoBehaviour
     {
@@ -11,7 +11,7 @@ namespace Grid
         private int _currentScale;
         private int _currentGrid;
 
-        private List<Grid> _grids = new List<Grid>();
+        private List<SpaceExploration.Grid.Grid> _grids = new List<SpaceExploration.Grid.Grid>();
 
         private void Start()
         {
@@ -22,7 +22,7 @@ namespace Grid
         
         private void GenerateNewGrid(Vector2 gridPosition)
         {
-            var grid = new Grid(maxScale, maxScale, gridPosition);
+            var grid = new SpaceExploration.Grid.Grid(maxScale, maxScale, gridPosition);
             
             transform.position = new Vector2(-grid.RowCount / 2, grid.ColCount / 2);
             _grids.Add(grid);

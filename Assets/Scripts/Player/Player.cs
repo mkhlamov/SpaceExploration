@@ -1,8 +1,8 @@
-﻿using System;
-using Interfaces;
+﻿using Player;
+using SpaceExploration.Interfaces;
 using UnityEngine;
 
-namespace Player
+namespace SpaceExploration.Player
 {
     public class Player : MonoBehaviour
     {

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Interfaces
+namespace SpaceExploration.Interfaces
 {
     public interface IInputService
     {
