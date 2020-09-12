@@ -12,11 +12,15 @@ namespace SpaceExploration.Grid
         private int _currentScale;
         public int CurrentScale => _currentScale;
         private int _currentGrid;
+        private GameObject _gridPrefab;
 
-        private List<Grid> _grids = new List<SpaceExploration.Grid.Grid>();
+        private List<Grid> _grids = new List<Grid>();
+        private List<GameObject> _tileGOs = new List<GameObject>();
+        private Vector2 _prevCenterPosition;
 
-        public GridManager(int minScale=5, int maxScale=100)
+        public GridManager(GameObject gridPrefab, int minScale=5, int maxScale=100)
         {
+            _gridPrefab = gridPrefab;
             _minScale = minScale;
             _maxScale = maxScale;
             _currentScale = minScale;
@@ -36,7 +40,35 @@ namespace SpaceExploration.Grid
             
             return _grids.First(x => x.IsInGrid(position));
         }
-        
+
+        public void RenderCurrentScaleGrid(Vector2 centerPosition)
+        {
+            if (_tileGOs.Count == 0)
+            {
+                for (var i = 0; i < _currentScale; i++)
+                {
+                    for (var j = 0; j < _currentScale; j++)
+                    {
+                        var go = GameObject.Instantiate(_gridPrefab,
+                            centerPosition + new Vector2(i - (_currentScale / 2), j - (_currentScale / 2)),
+                            Quaternion.identity);
+                        _tileGOs.Add(go);
+                    }
+                }
+            }
+            else
+            {
+                foreach (var tile in _tileGOs)
+                {
+                    var diff = centerPosition - _prevCenterPosition;
+                    tile.transform.position = tile.transform.position + new Vector3(diff.x,
+                        diff.y, tile.transform.position.z);
+                }
+            }
+            
+            _prevCenterPosition = centerPosition;
+        }
+
         private void GenerateNewGrid(Vector2 gridPosition)
         {
             var grid = new Grid(_maxScale, _maxScale, gridPosition);

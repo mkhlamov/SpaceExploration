@@ -8,11 +8,9 @@ namespace SpaceExploration.CompositionRoot
     {
         [SerializeField] private Player.Player player;
 
-        private void Start()
+        private void Awake()
         {
-            var inputService = new KeyboardInput();
-
-            player.InputService = inputService;
+            //player.InputService = new KeyboardInput();
         }
     }
 }

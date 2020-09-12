@@ -22,10 +22,18 @@ namespace SpaceExploration.Grid
 
         public bool IsInGrid(Vector2 position)
         {
-            return (position.x >= _gridPos.x - (_colCount - 1) / 2) &&
-                   (position.x <= _gridPos.x + (_colCount - 1) / 2) &&
-                   (position.y >= _gridPos.y - (_rowCount - 1) / 2) &&
-                   (position.y <= _gridPos.y + (_rowCount - 1) / 2);
+            return (position.x > _gridPos.x - (_colCount - 1) / 2) &&
+                   (position.x < _gridPos.x + (_colCount - 1) / 2) &&
+                   (position.y > _gridPos.y - (_rowCount - 1) / 2) &&
+                   (position.y < _gridPos.y + (_rowCount - 1) / 2);
+        }
+
+        public bool IsOnBorder(Vector2 position)
+        {
+            return (position.x == _gridPos.x - (_colCount - 1) / 2) ||
+                   (position.x == _gridPos.x + (_colCount - 1) / 2) ||
+                   (position.y == _gridPos.y - (_rowCount - 1) / 2) ||
+                   (position.y == _gridPos.y + (_rowCount - 1) / 2);
         }
     }
 }

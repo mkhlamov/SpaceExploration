@@ -395,6 +395,9 @@ MonoBehaviour:
   planetSprites:
   - {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   - {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
+  camera: {fileID: 519420031}
+  gridTilePrefab: {fileID: 8808471995346484055, guid: 776c38e061875fe43be58bbaa45b87c1,
+    type: 3}
 --- !u!4 &1057306875
 Transform:
   m_ObjectHideFlags: 0

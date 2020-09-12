@@ -14,20 +14,48 @@ namespace SpaceExploration
         [SerializeField] private Player.Player player;
         [SerializeField] private GameObject planetPrefab;
         [SerializeField] private List<Sprite> planetSprites;
+        [SerializeField] private Camera camera;
+        [SerializeField] private GameObject gridTilePrefab;
         
         private GridManager _gridManager;
         private Vector2 _centerPosition;
         private List<Planet> _planets = new List<Planet>();
         private Dictionary<Planet, GameObject> _planetGOs = new Dictionary<Planet, GameObject>();
 
+        #region Monobehaviour methods
+        
         private void Start()
         {
-            _gridManager = new GridManager();
+            if (camera == null)
+            {
+                if (Camera.main != null)
+                {
+                    camera = Camera.main;
+                }
+                else
+                {
+                    Debug.LogError("No camera found!");
+                }
+            }
             _centerPosition = player.transform.position;
+            _gridManager = new GridManager(gridTilePrefab, maxScale:5);
+            _gridManager.RenderCurrentScaleGrid(_centerPosition);
 
             FillCurrentGrid();
             Render();
         }
+
+        private void OnEnable()
+        {
+            player.OnPlayerMoved += PlayerMoved;
+        }
+        
+        private void OnDisable()
+        {
+            player.OnPlayerMoved -= PlayerMoved;
+        }
+        
+        #endregion
 
         private void FillCurrentGrid()
         {
@@ -47,7 +75,10 @@ namespace SpaceExploration
 
         private void Render()
         {
-            var playerPosition = player.transform.position;
+            /// ?????
+            camera.transform.position = new Vector3(_centerPosition.x, _centerPosition.y, camera.transform.position.z);
+            _gridManager.RenderCurrentScaleGrid(_centerPosition);
+            
             var renderGrid = new Grid.Grid(_gridManager.CurrentScale, _gridManager.CurrentScale, _centerPosition);
             var planetsInGrid = _planets.Where(x => renderGrid.IsInGrid(x.Coordinates)).ToList();
             planetsInGrid.Sort(PlanetComparer);
@@ -62,8 +93,14 @@ namespace SpaceExploration
                 }
                 else
                 {
+                    pgo.SetActive(true);
                     _planetGOs[p].GetComponent<PlanetObject>().ShowText(planetsInGrid.IndexOf(p) <= 10);
                 }
+            }
+
+            foreach (var pgoPair in _planetGOs)
+            {
+                pgoPair.Value.SetActive(planetsInGrid.Contains(pgoPair.Key));
             }
         }
 
@@ -74,6 +111,16 @@ namespace SpaceExploration
             var dist_y = (y.Coordinates - playerPosition).sqrMagnitude;
 
             return dist_x.CompareTo(dist_y);
+        }
+        
+        private void PlayerMoved(Vector2 playerPosition)
+        {
+            var renderGrid = new Grid.Grid(_gridManager.CurrentScale, _gridManager.CurrentScale, _centerPosition);
+            if (renderGrid.IsOnBorder(playerPosition))
+            {
+                _centerPosition = playerPosition;
+                Render();
+            }
         }
     }
 }
