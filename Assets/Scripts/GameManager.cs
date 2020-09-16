@@ -16,6 +16,7 @@ namespace SpaceExploration
         [SerializeField] private List<Sprite> planetSprites;
         [SerializeField] private Camera camera;
         [SerializeField] private GameObject gridTilePrefab;
+        [SerializeField] private Transform gridParent;
         
         private GridManager _gridManager;
         private Vector2 _centerPosition;
@@ -38,10 +39,10 @@ namespace SpaceExploration
                 }
             }
             _centerPosition = player.transform.position;
-            _gridManager = new GridManager(gridTilePrefab, maxScale:5);
-            _gridManager.RenderCurrentScaleGrid(_centerPosition);
+            _gridManager = new GridManager(gridTilePrefab, gridParent, maxScale:11);
+            _gridManager.UpdateGrid(_centerPosition);
 
-            FillCurrentGrid();
+            //FillCurrentGrid();
             Render();
         }
 
@@ -59,8 +60,8 @@ namespace SpaceExploration
 
         private void FillCurrentGrid()
         {
-            var currentGrid = _gridManager.GetCurrentGrid();
-            for (var i = 0; i < currentGrid.RowCount; i++)
+            var currentGrid = _gridManager.CurrentGrid;
+            for (var i = 0; i < _gridManager.CurrentScale; i++)
             {
                 for (var j = 0; j < currentGrid.ColCount; j++)
                 {
@@ -77,18 +78,27 @@ namespace SpaceExploration
         {
             /// ?????
             camera.transform.position = new Vector3(_centerPosition.x, _centerPosition.y, camera.transform.position.z);
-            _gridManager.RenderCurrentScaleGrid(_centerPosition);
             
-            var renderGrid = new Grid.Grid(_gridManager.CurrentScale, _gridManager.CurrentScale, _centerPosition);
-            var planetsInGrid = _planets.Where(x => renderGrid.IsInGrid(x.Coordinates)).ToList();
+            _gridManager.UpdateGrid(_centerPosition);
+            RenderPlanets();
+        }
+
+        private void RenderPlanets()
+        {
+            var planetsInGrid = _gridManager.GetPlanetsInRenderGrid();
             planetsInGrid.Sort(PlanetComparer);
+
+            // use pool
+            if (_planetGOs.Count > 50) _planetGOs.Clear();
 
             foreach (var p in planetsInGrid)
             {
                 if (!_planetGOs.TryGetValue(p, out var pgo))
                 {
                     pgo = Instantiate(planetPrefab, p.Coordinates, Quaternion.identity);
-                    pgo.GetComponent<PlanetObject>().Init(planetSprites[Random.Range(0, planetSprites.Count)], p.Rating, planetsInGrid.IndexOf(p) <= 10);
+                    pgo.GetComponent<PlanetObject>().Init(planetSprites[Random.Range(0, planetSprites.Count)], p.Rating,
+                        planetsInGrid.IndexOf(p) <= 10);
+                    pgo.transform.parent = gridParent;
                     _planetGOs[p] = pgo;
                 }
                 else
@@ -104,6 +114,7 @@ namespace SpaceExploration
             }
         }
 
+
         private int PlanetComparer(Planet x, Planet y)
         {
             var playerPosition = new Vector2(player.transform.position.x, player.transform.position.y);
@@ -115,8 +126,7 @@ namespace SpaceExploration
         
         private void PlayerMoved(Vector2 playerPosition)
         {
-            var renderGrid = new Grid.Grid(_gridManager.CurrentScale, _gridManager.CurrentScale, _centerPosition);
-            if (renderGrid.IsOnBorder(playerPosition))
+            if (_gridManager.RenderGrid.IsOnBorder(playerPosition))
             {
                 _centerPosition = playerPosition;
                 Render();
