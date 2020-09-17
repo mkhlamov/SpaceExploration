@@ -1075,6 +1075,8 @@ MonoBehaviour:
   gridTilePrefab: {fileID: 8808471995346484055, guid: 776c38e061875fe43be58bbaa45b87c1,
     type: 3}
   gridParent: {fileID: 269703370}
+  minScale: 5
+  maxScale: 51
 --- !u!4 &2045237195
 Transform:
   m_ObjectHideFlags: 0

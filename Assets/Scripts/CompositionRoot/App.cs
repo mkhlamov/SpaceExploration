@@ -12,8 +12,11 @@ namespace SpaceExploration.CompositionRoot
         [SerializeField] private GameManager gameManager;
         [SerializeField] private ScaleController scaleController;
         
+        [Header("Grid Manager Setup")]
         [SerializeField] private GameObject gridTilePrefab;
         [SerializeField] private Transform gridParent;
+        [SerializeField] private int minScale = 5;
+        [SerializeField] private int maxScale = 51;
 
         private void Awake()
         {
@@ -25,7 +28,8 @@ namespace SpaceExploration.CompositionRoot
             player.InputService = inputService;
             scaleController.InputService = inputService;
 
-            var gridManager = new GridManager(gridTilePrefab, gridParent, minScale: 5, maxScale: 11);
+            var gridManager = new GridManager(gridTilePrefab, gridParent, minScale: minScale % 2 == 1 ? minScale : minScale + 1,
+                maxScale: maxScale % 2 == 1 ? maxScale : maxScale + 1);
             gameManager.SetGridManager(gridManager);
         }
     }
