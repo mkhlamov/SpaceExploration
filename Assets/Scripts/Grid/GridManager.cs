@@ -14,7 +14,12 @@ namespace SpaceExploration.Grid
         private int _maxScale = 100;
 
         private int _currentScale;
-        public int CurrentScale => _currentScale;
+        public int CurrentScale
+        {
+            get => _currentScale;
+            set => _currentScale = Mathf.Clamp(value % 2 == 1 ? value : value + 1, _minScale, _maxScale);
+        }
+
         private Grid _currentGrid;
         public Grid CurrentGrid => _currentGrid;
         
@@ -31,9 +36,10 @@ namespace SpaceExploration.Grid
         {
             _gridPrefab = gridPrefab;
             _gridParent = gridParent;
-            _minScale = minScale;
-            _maxScale = maxScale;
+            _minScale = minScale % 2 == 1 ? minScale : minScale + 1;
+            _maxScale = maxScale % 2 == 1 ? maxScale : maxScale + 1;
             _currentScale = minScale;
+            _prevCenterPosition = Vector2.zero;
 
             _currentGrid = GenerateNewGrid(Vector2.zero);
             _renderGrid = new Grid(_currentScale, _currentScale, Vector2.zero);
@@ -53,31 +59,43 @@ namespace SpaceExploration.Grid
 
         private void RenderCurrentScaleGrid(Vector2 centerPosition)
         {
-            if (_tileGOs.Count == 0)
+            Debug.Log(centerPosition);
+            Debug.Log(_renderGrid);
+            Debug.Log(CurrentScale);
+            
+            if (_tileGOs.Count == 0) { CreateGridGameObjects(centerPosition); }
+            
+            foreach (var tile in _tileGOs)
             {
-                for (var i = 0; i < _currentScale; i++)
-                {
-                    for (var j = 0; j < _currentScale; j++)
-                    {
-                        var go = Object.Instantiate(_gridPrefab,
-                            centerPosition + new Vector2(i - (_currentScale / 2), j - (_currentScale / 2)),
-                            Quaternion.identity);
-                        go.transform.parent = _gridParent;
-                        _tileGOs.Add(go);
-                    }
-                }
+                var diff = centerPosition - _prevCenterPosition;
+                var position = tile.transform.position;
+                position = position + new Vector3(diff.x,
+                               diff.y, position.z);
+                tile.transform.position = position;
+                tile.SetActive(_renderGrid.IsInGrid(position));
             }
-            else
-            {
-                foreach (var tile in _tileGOs)
-                {
-                    var diff = centerPosition - _prevCenterPosition;
-                    tile.transform.position = tile.transform.position + new Vector3(diff.x,
-                        diff.y, tile.transform.position.z);
-                }
-            }
+            Debug.Log(_tileGOs.Count(x=>x.activeSelf));
             
             _prevCenterPosition = centerPosition;
+        }
+
+        private void CreateGridGameObjects(Vector2 centerPosition)
+        {
+            var gridRootGO = new GameObject();
+            gridRootGO.transform.parent = _gridParent;
+            gridRootGO.name = "Grid Root";
+            
+            for (var i = 0; i < _maxScale; i++)
+            {
+                for (var j = 0; j < _maxScale; j++)
+                {
+                    var go = Object.Instantiate(_gridPrefab,
+                        centerPosition + new Vector2(i - (_maxScale / 2), j - (_maxScale / 2)),
+                        Quaternion.identity);
+                    go.transform.parent = gridRootGO.transform;
+                    _tileGOs.Add(go);
+                }
+            }
         }
 
         public void UpdateGrid(Vector2 centerPosition)
@@ -120,6 +138,8 @@ namespace SpaceExploration.Grid
             var planets = new List<Planet>();
             foreach (var grid in grids)
             {
+                // ?????
+                if (grid == null) continue;
                 planets.AddRange(grid.Planets.Where(x => _renderGrid.IsInGrid(x.Coordinates)));
             }
             return planets;

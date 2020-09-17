@@ -18,7 +18,7 @@ namespace SpaceExploration.Player
         private void Start()
         {
             _playerMovement = new PlayerMovement(sensitivity);
-            InputService = new KeyboardInput();
+            //InputService = new KeyboardInput();
         }
 
         public void SetPosition(Vector2 position)

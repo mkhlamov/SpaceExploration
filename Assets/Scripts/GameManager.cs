@@ -39,10 +39,8 @@ namespace SpaceExploration
                 }
             }
             _centerPosition = player.transform.position;
-            _gridManager = new GridManager(gridTilePrefab, gridParent, maxScale:11);
-            _gridManager.UpdateGrid(_centerPosition);
-
-            //FillCurrentGrid();
+            //_gridManager = new GridManager(gridTilePrefab, gridParent, minScale:11, maxScale:11);
+            
             Render();
         }
 
@@ -58,6 +56,24 @@ namespace SpaceExploration
         
         #endregion
 
+        public void SetGridManager(GridManager gridManager)
+        {
+            if (gridManager != null)
+            {
+                _gridManager = gridManager;
+            }
+            else
+            {
+                throw new ArgumentNullException(nameof(gridManager));
+            }
+        }
+
+        public void ChangeScale(int diff)
+        {
+            _gridManager.CurrentScale += diff * 2;
+            Render();
+        }
+        
         private void FillCurrentGrid()
         {
             var currentGrid = _gridManager.CurrentGrid;
@@ -81,6 +97,7 @@ namespace SpaceExploration
             
             _gridManager.UpdateGrid(_centerPosition);
             RenderPlanets();
+            SetCameraSize();
         }
 
         private void RenderPlanets()
@@ -131,6 +148,11 @@ namespace SpaceExploration
                 _centerPosition = playerPosition;
                 Render();
             }
+        }
+
+        private void SetCameraSize()
+        {
+            camera.orthographicSize = (_gridManager.CurrentScale - 0.5f) / 1.5f;
         }
     }
 }
