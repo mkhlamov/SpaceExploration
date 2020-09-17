@@ -59,10 +59,6 @@ namespace SpaceExploration.Grid
 
         private void RenderCurrentScaleGrid(Vector2 centerPosition)
         {
-            Debug.Log(centerPosition);
-            Debug.Log(_renderGrid);
-            Debug.Log(CurrentScale);
-            
             if (_tileGOs.Count == 0) { CreateGridGameObjects(centerPosition); }
             
             foreach (var tile in _tileGOs)
@@ -74,7 +70,6 @@ namespace SpaceExploration.Grid
                 tile.transform.position = position;
                 tile.SetActive(_renderGrid.IsInGrid(position));
             }
-            Debug.Log(_tileGOs.Count(x=>x.activeSelf));
             
             _prevCenterPosition = centerPosition;
         }

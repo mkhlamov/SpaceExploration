@@ -1,5 +1,6 @@
 ﻿using System;
 using SpaceExploration.Grid;
+using SpaceExploration.Interfaces;
 using UnityEngine;
 
 namespace SpaceExploration.Controllers
@@ -23,7 +24,7 @@ namespace SpaceExploration.Controllers
                 }
             }
         }
-        
+
         public void ScaleUp()
         {
             gameManager.ChangeScale(1);

@@ -5,8 +5,6 @@ namespace SpaceExploration.Input
 {
     public class KeyboardInput : IInputService
     {
-        private int _horizontalInput = 0;
-        private int _verticalInput = 0;
         private Vector2 _movementInput;
 
         private bool _movementButtonDown = false;
