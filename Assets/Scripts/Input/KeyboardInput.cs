@@ -32,5 +32,10 @@ namespace SpaceExploration.Input
                 return Vector2.zero;
             }
         }
+
+        public float GetZoomDelta()
+        {
+            return UnityEngine.Input.GetAxis("Mouse ScrollWheel") * 10;
+        }
     }
 }

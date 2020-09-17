@@ -10,6 +10,9 @@ namespace SpaceExploration.Controllers
         [SerializeField] private Camera camera;
         [SerializeField] private GameManager gameManager;
         
+        public IInputService InputService;
+
+        
         private void Start()
         {
             if (camera == null)
@@ -22,6 +25,21 @@ namespace SpaceExploration.Controllers
                 {
                     Debug.LogError("No camera found!");
                 }
+            }
+        }
+
+        private void Update()
+        {
+            UpdateZoom();
+        }
+
+        private void UpdateZoom()
+        {
+            var zoom = InputService.GetZoomDelta();
+            if (Mathf.Abs(zoom) > 0.1f)
+            {
+                var newScale = zoom > 0 ? -1 : 1;
+                gameManager.ChangeScale(newScale);
             }
         }
 

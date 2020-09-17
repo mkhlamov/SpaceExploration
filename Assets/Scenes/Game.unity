@@ -1071,6 +1071,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 610543148}
   gameManager: {fileID: 1057306874}
+  scaleController: {fileID: 649645312}
   gridTilePrefab: {fileID: 8808471995346484055, guid: 776c38e061875fe43be58bbaa45b87c1,
     type: 3}
   gridParent: {fileID: 269703370}

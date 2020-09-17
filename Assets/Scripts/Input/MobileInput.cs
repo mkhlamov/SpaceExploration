@@ -33,5 +33,10 @@ namespace SpaceExploration.Input
 
             return movement;
         }
+
+        public float GetZoomDelta()
+        {
+            return 0;
+        }
     }
 }

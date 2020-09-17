@@ -10,6 +10,7 @@ namespace SpaceExploration.CompositionRoot
     {
         [SerializeField] private Player.Player player;
         [SerializeField] private GameManager gameManager;
+        [SerializeField] private ScaleController scaleController;
         
         [SerializeField] private GameObject gridTilePrefab;
         [SerializeField] private Transform gridParent;
@@ -17,10 +18,12 @@ namespace SpaceExploration.CompositionRoot
         private void Awake()
         {
 #if UNITY_STANDALONE || UNITY_EDITOR
-            player.InputService = new KeyboardInput();
+            var inputService = new KeyboardInput();
 #elif  UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
-            player.InputService = new MobileInput();
+            var inputService = new MobileInput();
 #endif
+            player.InputService = inputService;
+            scaleController.InputService = inputService;
 
             var gridManager = new GridManager(gridTilePrefab, gridParent, minScale: 5, maxScale: 11);
             gameManager.SetGridManager(gridManager);
