@@ -66,12 +66,6 @@ namespace SpaceExploration.Grid
                    (position.y == _gridPos.y + (_rowCount - 1) / 2);
         }
 
-        public void SetPlanets(List<Planet> planets)
-        {
-            _planetPositions.Clear();
-            
-        }
-
         public void AddRandomPlanets(float planetFillRate=0.3f)
         {
             for (var i = 0; i < RowCount; i++)
@@ -80,11 +74,12 @@ namespace SpaceExploration.Grid
                 {
                     // randomly decide if we need to put a planet
                     if (!(Random.Range(0f, 1f) <= planetFillRate)) continue;
-                    var planetPos = new Vector2(i, j) + GridPosition;
+                    var planetPos = new Vector2(-(_colCount - 1) / 2 + i, 
+                        -(_rowCount - 1) / 2 + j) + GridPosition;
                     var planet = new Planet(planetPos, 
                         Random.Range(1, 10001));
                     
-                    _planetPositions[new Vector2(i, j) + GridPosition] = planet;
+                    _planetPositions[planetPos] = planet;
                 }
             }
         }

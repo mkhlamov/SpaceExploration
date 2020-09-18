@@ -74,22 +74,6 @@ namespace SpaceExploration
             Render();
         }
         
-        private void FillCurrentGrid()
-        {
-            var currentGrid = _gridManager.CurrentGrid;
-            for (var i = 0; i < _gridManager.CurrentScale; i++)
-            {
-                for (var j = 0; j < currentGrid.ColCount; j++)
-                {
-                    // randomly decide if we need to put a planet
-                    if (!(Random.Range(0f, 1f) <= planetFillRate)) continue;
-                    var planet = new Planet(new Vector2(i, j) + currentGrid.GridPosition, 
-                        Random.Range(1, 10001));
-                    _planets.Add(planet);
-                }
-            }
-        }
-
         private void Render()
         {
             /// ?????
@@ -106,7 +90,7 @@ namespace SpaceExploration
             planetsInGrid.Sort(PlanetComparer);
 
             // use pool
-            if (_planetGOs.Count > 50) _planetGOs.Clear();
+            if (_planetGOs.Count > _gridManager.CurrentScale * _gridManager.CurrentScale) DestroyPlanets();
 
             foreach (var p in planetsInGrid)
             {
@@ -129,6 +113,15 @@ namespace SpaceExploration
             {
                 pgoPair.Value.SetActive(planetsInGrid.Contains(pgoPair.Key));
             }
+        }
+
+        private void DestroyPlanets()
+        {
+            foreach (var go in _planetGOs.Values)
+            {
+                Destroy(go);
+            }
+            _planetGOs.Clear();
         }
 
 
