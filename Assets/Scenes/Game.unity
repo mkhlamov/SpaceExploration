@@ -451,7 +451,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 21dd19523f1018142ad1c02b4c4e3440, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -668,8 +668,14 @@ MonoBehaviour:
   planetPrefab: {fileID: 3484095958792497965, guid: d506e8d98b871cf4fa0abc476bba6d90,
     type: 3}
   planetSprites:
-  - {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  - {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 21300000, guid: 7d462e415b2ab514686ebac5e0636a77, type: 3}
+  - {fileID: 21300000, guid: 82c3919f70eb8934080c308822affe28, type: 3}
+  - {fileID: 21300000, guid: a08782e3294581f4882781e28391b328, type: 3}
+  - {fileID: 21300000, guid: b2ab8e4bb50fbc84f92db3d15ad57af2, type: 3}
+  - {fileID: 21300000, guid: 2a170a4d7b9a2674bac58cd62991c33a, type: 3}
+  - {fileID: 21300000, guid: e2128012c723f9b489c59a88e9581a2f, type: 3}
+  - {fileID: 21300000, guid: 3d2d76ed2f308184fb77d20acaba8108, type: 3}
+  - {fileID: 21300000, guid: c7c8cca73b4899f40a0d8d00627f9938, type: 3}
   camera: {fileID: 519420031}
   gridTilePrefab: {fileID: 8808471995346484055, guid: 776c38e061875fe43be58bbaa45b87c1,
     type: 3}
